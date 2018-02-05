@@ -1,3 +1,0 @@
-/home/olivier/Workspace/C/cours-algo-c/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/olivier/Workspace/C/cours-algo-c/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/olivier/Workspace/C/cours-algo-c/cmake-build-debug/CMakeFiles/cours_algo_c.dir
