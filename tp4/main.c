@@ -5,19 +5,11 @@
 
 int main() {
 
-        liste l2 = {
-                .value = 2,
-                .next = NULL
-        };
+        liste* list = malloc(sizeof(liste));
+	list->value = 1;
+	list->next = NULL;
 
-        liste l = {
-                .value = 1,
-                .next = &l2
-        };
-
-        liste* list = &l;
-
-	/*
+	list = ajouter_fin(list,2);
         list = ajouter_fin(list, 4);
         list = ajouter_debut(list, 0);
         list = ajouter_position(list, 3, 3);
@@ -33,12 +25,9 @@ int main() {
         list = supprimer(list, 0);
         afficher(list);
 
-        int tab[2] = { 5, 6 };
-        list = remplir(list, tab, 2);
-        afficher(list);
-	*/
-
 	vider(&list);
+	afficher(list);
+
 
         return 0;
 }

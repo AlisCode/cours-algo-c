@@ -130,13 +130,14 @@ liste* supprimer(liste* l, int val) {
 void vider(liste** l) {
 	
 	liste* current = *l;
-	liste* save_next;
-	
-	while(current != NULL) {
-		if(current->next != NULL) {
-			save_next = current->next; 
-		}
-		free(current);
-		current = save_next;
+	liste* next;
+
+	while (current != NULL) 
+	{
+	    next = current->next;
+	    free(current);
+	    current = next;
 	}
+
+	*l = NULL;
 }
