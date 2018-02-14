@@ -4,26 +4,36 @@
 // But : Implémenter une liste dans une liste chaînée
 
 #include <stdio.h>
-
-typedef struct _liste liste;
-
-struct _liste {
-	int value;
-	liste* next;
-};
-
-void afficher(liste* l);
-liste* ajouter_fin(liste* l, int val);
-liste* ajouter_debut(liste* l, int val);
-liste* ajouter_position(liste* l, int val, unsigned int position);
-liste* remplir(liste* l, int tab[], unsigned int nb);
-int rechercher(liste* l, int entier);
-liste* supprier(liste* l, int entier);
-void vider(liste** l);
+#include "liste.h"
 
 int main() {
+
+	liste l2 = {
+		.value = 1,
+		.next = NULL
+	};
+
+	liste l = {
+		.value = 0,
+		.next = &l2
+	};
+
 	
+
 	printf("Implémentation d'une liste!\n");
 	return 0;
+}
+
+liste* ajouter_fin(liste* l, int val) {
+
+	liste new_l = {
+		.value = val,
+		.next = NULL	
+	};
+
+	while(l->next != NULL) {
+		
+	}
+
 }
 
