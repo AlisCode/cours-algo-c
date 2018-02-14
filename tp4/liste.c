@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include "liste.h"
 
+//affiche les élèments de la liste 
+//l : pointeur vers la liste
+
 void afficher(liste* l){
 
 	// Si la liste est vide, on l'affiche	
@@ -20,6 +23,10 @@ void afficher(liste* l){
     	}
 }
 
+// ajoute un élèment à la fin de la liste
+// l : pointeur vers la liste
+// val : la valeur à ajouter à la fin 
+// retourne le pointeur vers la liste mise à jour 
 liste* ajouter_fin(liste* l, int val) {
 
 	// Sauvegarde la tête de la liste
@@ -41,6 +48,10 @@ liste* ajouter_fin(liste* l, int val) {
 	return head;
 }
 
+//ajoute un élèment au début de la liste 
+//l : pointeur vers la liste
+// val : la valeur à ajouter au début
+// retourne vers la nouvelle liste 
 liste* ajouter_debut(liste* l, int val) {
 
 	// Crée la nouvelle liste
@@ -52,6 +63,12 @@ liste* ajouter_debut(liste* l, int val) {
 
 	return new_l;	
 }
+
+// ajoute un élèment à une position de la liste
+// l : pointeur vers la liste
+// val : la valeur à ajouter
+// position : la position à la quelle il faut ajouter l'élèment
+// retourne : la liste mise à jour
 
 liste* ajouter_position(liste* l, int val, unsigned int position) {
 
@@ -75,6 +92,11 @@ liste* ajouter_position(liste* l, int val, unsigned int position) {
 	return head;
 }
 
+// rempli la liste avec des valeurs 
+// l : pointeur vers la liste
+// tab : le tableau de valeurs à ajouter
+// nb : la longeur du tableau 
+// retourne la liste rempli avec les valeurs 
 liste* remplir(liste* l, int tab[], unsigned int nb) {
 	
 	// Ajoute à la fin chaque élément du tableau. NB: ceci est très peu performant et pourrait être mieux implémenté.	
@@ -86,6 +108,11 @@ liste* remplir(liste* l, int tab[], unsigned int nb) {
 	return l;
 }
 
+// recherche une valeur dans le tableau 
+// l : pointeur vers la liste
+// val : la valeur à rechercher 
+// retourne :  l'index de la valeur
+// retourne : -1 si aucune valeur trouvé
 int rechercher(liste* l, int val) {
 	int i = 0;
 	// Parcours la liste
@@ -99,7 +126,10 @@ int rechercher(liste* l, int val) {
 	// si on est toujours dans cette fonction maintenant, cela veut dire qu'il n'existe pas d'élement ayant la valeur recherchée...
 	return -1;
 }
-
+//supprime une valeur dans la liste 
+// l : pointeur vers la liste
+// val : la valeur à supprimer
+// retourne la liste mise à jour
 liste* supprimer(liste* l, int val) {
 
 	// Sauvegarde la tête de liste pour la retourner à la fin
@@ -127,6 +157,8 @@ liste* supprimer(liste* l, int val) {
 	return head;
 } 
 
+// vider la liste 
+// l : pointeur vers la liste
 void vider(liste** l) {
 	
 	liste* current = *l;
