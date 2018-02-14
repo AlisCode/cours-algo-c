@@ -19,9 +19,17 @@ int main() {
 	};
 
 	
+	afficher(&l);
 
-	printf("Implémentation d'une liste!\n");
 	return 0;
+}
+
+void afficher(liste* l){
+	while(l!=NULL)
+    {
+    	printf("%d\n",l->value);
+    	l=l->next;
+    }
 }
 
 liste* ajouter_fin(liste* l, int val) {
