@@ -19,6 +19,7 @@ liste* ajouter_position(liste* l, int val, unsigned int position);
 liste* remplir(liste* l, int tab[], unsigned int nb);
 int rechercher(liste* l, int entier);
 liste* supprier(liste* l, int entier);
+void vider(liste** l);
 
 int main() {
 	
