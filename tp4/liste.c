@@ -20,6 +20,7 @@ int main() {
 
 	
 	afficher(&l);
+	ajouter_fin(&l, 5);	
 
 	return 0;
 }
@@ -40,8 +41,19 @@ liste* ajouter_fin(liste* l, int val) {
 	};
 
 	while(l->next != NULL) {
-		
+		l = l->next;	
 	}
 
+	l->next = &new_l;
+	return l;
 }
 
+liste* ajouter_debut(liste* l, int val) {
+
+	liste new_l = {
+		.value = val,
+		.next = l
+	};
+
+	return &new_l;	
+}

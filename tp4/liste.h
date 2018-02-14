@@ -1,5 +1,5 @@
 #ifndef LISTE_H
-#define MAP_H
+#define LISTE_H
 
 typedef struct _liste liste;
 
