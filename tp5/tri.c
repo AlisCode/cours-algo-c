@@ -1,128 +1,140 @@
+// Date 26/02/2018
+// Author <olivier.pinon@cpe.fr>
+// Author <richard.raduly@cpe.fr>
+// But : Implémenter le tri par fusion/éclatement sur une liste chaînée
+
 #include "liste.h"
 #include "tri.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-void eclatement(liste *l, liste **liste1, liste **liste2)
-{
-	// Initialise une nouvelle liste
-	liste* final = NULL;
-	liste* l1 = NULL;
-	liste* l2 = NULL;
+// Eclate la liste L en deux liste liste1 et liste2 selon le principe de sous-listes vu en cours.
+// Liste2 peut être nul.
+// l: la liste à éclater (variable en entrée)
+// liste1: Adresse de la liste 1 (variable en entrée/sortie)
+// liste2: Adresse de la liste 2 (variable en entrée/sortie)
+void eclatement(liste *l, liste **liste1, liste **liste2) {
+    // Initialise une nouvelle liste
+    liste *l1 = NULL;
+    liste *l2 = NULL;
+    liste *iter = l;
 
-	int prev = 0;
-	final = l;  
-	while(final->next) {
-		do {
-			prev = final->value;
-			l1 = ajouter_fin(l1,final->value);
-	    		if(final->next) {
-	   			final = final->next;
-	  		}
-	  	} while(final->value > prev);
-		do {
-			prev = final->value;
-			l2 = ajouter_fin(l2,final->value);
-	    		if(final->next) {
-	   			final = final->next;
-	  		}
-	  	} while(final->value > prev);
-	}
-	
-	// Sort le contenu des listes éclatées dans les double-pointeurs qu'on a donné en entrée
-	*liste1 = l1;
-	*liste2 = l2;
+    // Gère le cas d'une liste nulle ou avec un seul élément.
+    if (l == NULL || l->next == NULL) {
+        *liste1 = l;
+        *liste2 = NULL;
+        return;
+    }
+
+    // Crée les variables pour l'algorithme d'éclatement
+    int prev_added = 1;
+    l1 = l;
+    l2 = NULL;
+    iter = l->next;
+
+    // Sauvegarde la tête de liste
+    liste *head_l1 = l1;
+    liste *head_l2 = NULL;
+
+    // On tourne tant qu'on a encore des variables dans la liste
+    while (iter != NULL) {
+        // En fonction de la dernière liste dans laquelle on a ajouté une valeur
+        if (prev_added == 1) {
+            // On ajoute un élément dans l1 si l'élément est supérieur à la dernière valeur de l1
+            if (l1->value < iter->value) {
+                l1->next = iter;
+                l1 = l1->next;
+            } else {
+                // Sinon ...
+                // On gère l'instanciation de l2, qui peut être nul sinon
+                if (l2 == NULL) {
+                    l2 = iter;
+                    head_l2 = l2;
+                } else {
+                    // On ajoute la valeur dans l2
+                    l2->next = iter;
+                    l2 = l2->next;
+                }
+                // On change de liste pour ajouter la suite de la sous-liste
+                prev_added = 2;
+            }
+        } else {
+            // On ajoute un élément dans l1 si l'élément est supérieur à la dernière valeur de l2
+            if (l2->value < iter->value) {
+                l2->next = iter;
+                l2 = l2->next;
+            } else {
+                // Sinon ...
+                // Pas besoin de gérer l'instanciation de l1, qui ne peut pas être nul
+                l1->next = iter;
+                l1 = l1->next;
+
+                // On change de liste pour ajouter la suite de la sous-liste
+                prev_added = 1;
+            }
+        }
+
+        // On avance dans la liste
+        iter = iter->next;
+    }
+
+    // On rend le dernier élément de l1 nul pour éviter certains cas...
+    l1->next = NULL;
+
+    // Sort le contenu des listes éclatées dans les double-pointeurs qu'on a donné en entrée
+    *liste1 = head_l1;
+    *liste2 = head_l2;
 }
 
-liste* fusion(liste* l1, liste* l2) {
-	// Gère le cas d'une liste vide
-	if(l1 == NULL) { return l2; }
-	if(l2 == NULL) { return l1; }
+// Fusionne les deux listes passées en argument dans une liste qui est retounée
+// l1: la première partie de la liste à fusionner
+// l2: la deuxième partie de la liste à fusionner
+// retourne: la liste fusionnée (et triée)
+liste *fusion(liste *l1, liste *l2) {
+    // Gère le cas d'une liste vide
+    if (l1 == NULL) { return l2; }
+    if (l2 == NULL) { return l1; }
 
-	// La liste finale est le pointeur sur lequel on va itérer. On l'initialise à la plus petite valeur entre l1 et l2
-	liste* final;
-	if (l1->value < l2->value) { 
-		final = l1;
-		l1 = l1->next;
-	}
-	else { 
-		final = l2; 
-		l2 = l2->next;		
-	}
+    // La liste finale est le pointeur sur lequel on va itérer. On l'initialise à la plus petite valeur entre l1 et l2
+    liste *final;
+    if (l1->value < l2->value) {
+        // Récursivement: lance la fonction de fusion sur les éléments d'après
+        final = l1;
+        final->next = fusion(l1->next, l2);
+    } else {
+        // Récursivement: lance la fonction de fusion sur les éléments d'après
+        final = l2;
+        final->next = fusion(l1, l2->next);
+    }
 
-	// On garde un pointeur sur le premier élément de la liste
-	liste* head = final;
-
-	int flag_ovf_l1 = 0;
-	int flag_ovf_l2 = 0;
-
-	// cf. algo cours
-	while(l1 != NULL || l2 != NULL) {
-		while(flag_ovf_l1 != 1 || flag_ovf_l2 != 1)
-		{
-			if(flag_ovf_l2 == 1) {
-				final->next = l1;
-				if(l1->next == NULL || l1->value < l1->next->value) { flag_ovf_l1 = 1; }
-				l1 = l1->next;
-			}
-			else if(flag_ovf_l1 == 1) {
-				final->next = l2;
-				if(l2->next == NULL || l2->value < l2->next->value) { flag_ovf_l2 = 1; }
-				l2 = l2->next;
-			}
-			else {
-				if(l1->value < l2->value) {
-					final->next = l1;
-					if(l1->next == NULL || l1->value < l1->next->value) { flag_ovf_l1 = 1; }
-					l1 = l1->next;
-				}	
-				else {
-					final->next = l2;
-					if(l2->next == NULL || l2->value < l2->next->value) { flag_ovf_l2 = 1; }
-					l2 = l2->next;
-				}
-			}
-			final = final->next;
-		}
-		flag_ovf_l1 = 0;
-		flag_ovf_l2 = 0;
-		if(l1 == NULL)
-			flag_ovf_l1 = 1;
-		if(l2 == NULL)
-			flag_ovf_l2 = 1;
-	}
-
-	// Quand on sort de la boucle, il reste une liste vide et une liste pleine. Il faut ajouter le contenu de cette liste encore pleine à la liste finale.
-	if(l1 == NULL) {
-		final->next = l2;
-	}
-	else {
-		final->next = l1;
-	} 
-
-	// On retourne le pointeur vers le premier élément
-	return head;
+    return final;
 }
 
-liste* tri_fusion(liste* l) {
-	liste* final = NULL;
-	liste* head = final;
-	liste* l1 = NULL;
-	liste* l2 = NULL;
-	do {
-		eclatement(l,&l1, &l2);
-		puts("eclatement");
-		afficher(l1);
-		puts("--suite--");
-		afficher(l2);
-		puts("ok_eclatement\n");
-		liste* new = fusion(l1,l2);
-		afficher(new);
-		puts("ok_fusion");
-		final->next = new; 
-		puts("ok_end_loop");
-	} while(l1 != NULL && l2 != NULL);
+// Trie la liste dont l'adresse est passée en paramètre en utilisant l'algorithme de tri par éclatement/fusion
+// l: Adresse de la liste à trier
+void tri_fusion(liste **l) {
+    liste *head = *l;
+    liste *l1 = NULL;
+    liste *l2 = NULL;
 
-	return head;
+    // Gère le cas d'une liste nulle
+    if ((head == NULL) || (head->next == NULL)) {
+        return;
+    }
+
+    // Continue tant qu'aucune des listes éclatées n'est nulle
+    int continuer = 1;
+    do {
+        // On éclate la liste...
+        eclatement(head, &l1, &l2);
+        if (l1 == NULL || l2 == NULL) {
+            continuer = 0;
+        }
+        // Et on la re-fusionne
+        head = fusion(l1, l2);
+    } while (continuer == 1);
+
+    // On affecte la liste triée en entrée/sortie grâce au double-pointeur
+    *l = head;
 }
