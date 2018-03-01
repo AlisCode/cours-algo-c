@@ -13,4 +13,4 @@ main.o: main.c arbre.h
 arbre.o: arbre.c arbre.h
 
 clean: 
-	rm -rf *.o main hanoi 
+	rm -rf *.o arbre hanoi 

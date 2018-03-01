@@ -1,4 +1,0 @@
-3
-le 0
-chat 2
-soris 2
