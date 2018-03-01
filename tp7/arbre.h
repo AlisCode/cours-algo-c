@@ -16,5 +16,6 @@ void insertion_recursive(noeud** racine, int valeur);
 void insertion_iterative(noeud** racine, int valeur);
 void suppression(noeud** racine, int valeur);
 void remplissage(noeud** racine, const char* nom);
+noeud** rechercher(noeud** racine, int valeur);
 
 #endif

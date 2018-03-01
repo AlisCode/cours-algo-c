@@ -20,7 +20,9 @@ int main() {
 	insertion_recursive(&racine, 22);
 
 	//parcours_grd(racine);
-	parcours_rgd(racine);
-
+	//parcours_rgd(racine);
+	//suppression(&racine, 10);
+	//parcours_grd(racine);
+	
 	return 0;
 }
